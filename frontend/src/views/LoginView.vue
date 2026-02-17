@@ -1,0 +1,143 @@
+<template>
+  <div class="auth-container">
+    <div class="auth-box">
+      <h2>Welcome Back</h2>
+      <p>Login to manage your digital legacy</p>
+      
+      <form @submit.prevent="handleLogin">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            v-model="form.email"
+            required
+            placeholder="Enter your email"
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            v-model="form.password"
+            required
+            placeholder="Enter your password"
+          >
+        </div>
+        
+        <button type="submit" class="btn" :disabled="loading">
+          {{ loading ? 'Logging in...' : 'Login' }}
+        </button>
+        
+        <p v-if="error" class="error">{{ error }}</p>
+      </form>
+      
+      <p class="auth-link">
+        Don't have an account? 
+        <router-link to="/register">Register here</router-link>
+      </p>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'LoginView',
+  data() {
+    return {
+      form: {
+        email: '',
+        password: ''
+      },
+      loading: false,
+      error: ''
+    }
+  },
+  methods: {
+    async handleLogin() {
+      this.loading = true
+      this.error = ''
+      
+      try {
+        // For now, just simulate login
+        // We'll connect to backend later
+        localStorage.setItem('token', 'dummy-token')
+        localStorage.setItem('user', JSON.stringify({ 
+          name: 'Test User',
+          email: this.form.email 
+        }))
+        
+        this.$router.push('/dashboard')
+      } catch (err) {
+        this.error = 'Login failed. Please try again.'
+      } finally {
+        this.loading = false
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 70px);
+  padding: 20px;
+}
+
+.auth-box {
+  background: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  width: 100%;
+  max-width: 400px;
+}
+
+h2 {
+  margin: 0 0 10px;
+  color: #333;
+  text-align: center;
+}
+
+.auth-box p {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn:hover:not(:disabled) {
+  background: #5a67d8;
+}
+
+.btn:disabled {
+  background: #a0aec0;
+  cursor: not-allowed;
+}
+
+.auth-link {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.auth-link a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+}
+</style>
