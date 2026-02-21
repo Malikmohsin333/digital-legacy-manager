@@ -66,6 +66,8 @@
 </template>
 
 <script>
+import { authService } from '../services/auth';
+
 export default {
   name: 'RegisterView',
   data() {
@@ -92,16 +94,11 @@ export default {
       this.error = ''
       
       try {
-        // For now, just simulate registration
-        localStorage.setItem('token', 'dummy-token')
-        localStorage.setItem('user', JSON.stringify({ 
-          name: this.form.name,
-          email: this.form.email 
-        }))
-        
+        const { confirmPassword, ...registerData } = this.form
+        await authService.register(registerData)
         this.$router.push('/dashboard')
       } catch (err) {
-        this.error = 'Registration failed. Please try again.'
+        this.error = err.response?.data?.message || 'Registration failed. Please try again.'
       } finally {
         this.loading = false
       }
@@ -111,7 +108,6 @@ export default {
 </script>
 
 <style scoped>
-/* Same styles as LoginView */
 .auth-container {
   display: flex;
   justify-content: center;

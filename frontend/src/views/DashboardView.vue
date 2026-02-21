@@ -99,6 +99,8 @@
 </template>
 
 <script>
+import { authService } from '../services/auth';
+
 export default {
   name: 'DashboardView',
   data() {
@@ -124,8 +126,8 @@ export default {
   },
   methods: {
     loadUserData() {
-      const user = JSON.parse(localStorage.getItem('user') || '{}')
-      this.userName = user.name || 'User'
+      const user = authService.getCurrentUser()
+      this.userName = user?.name || 'User'
     },
     loadAccounts() {
       // Sample data for now

@@ -43,6 +43,8 @@
 </template>
 
 <script>
+import { authService } from '../services/auth';
+
 export default {
   name: 'LoginView',
   data() {
@@ -61,17 +63,10 @@ export default {
       this.error = ''
       
       try {
-        // For now, just simulate login
-        // We'll connect to backend later
-        localStorage.setItem('token', 'dummy-token')
-        localStorage.setItem('user', JSON.stringify({ 
-          name: 'Test User',
-          email: this.form.email 
-        }))
-        
+        await authService.login(this.form)
         this.$router.push('/dashboard')
       } catch (err) {
-        this.error = 'Login failed. Please try again.'
+        this.error = err.response?.data?.message || 'Login failed. Please try again.'
       } finally {
         this.loading = false
       }
